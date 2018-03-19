@@ -10,9 +10,25 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
+//用户注册页面
+Route::get('/register', '\App\Http\Controllers\RegisterController@index');
+//用户注册逻辑
+Route::post('/register', '\App\Http\Controllers\RegisterController@register');
 
-//文章创建页面 get方式
-Route::get('/posts/create', '\App\Http\Controllers\PostsController@create');
+//用户登录页面
+Route::get('/login', '\App\Http\Controllers\LoginController@index');
+//用户登录逻辑
+Route::post('/login', '\App\Http\Controllers\LoginController@login');
+
+//用户注销
+Route::get('/logout', '\App\Http\Controllers\LoginController@logout');
+
+
+//用户个人设置页面
+Route::get('/user/me/setting', '\App\Http\Controllers\UserController@setting');
+
+//用户个人信息保存逻辑
+Route::post('/user/me/setting', '\App\Http\Controllers\UserController@settingStore');
 
 //文章编辑页面
 Route::get('/posts/{post}/edit', '\App\Http\Controllers\PostsController@edit');
