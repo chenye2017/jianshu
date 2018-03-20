@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Posts;
+use App\Post;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use function Sodium\compare;
 
 class PostsController extends Controller
@@ -11,14 +12,15 @@ class PostsController extends Controller
     //获取文章列表页
     public function index()
     {
-        $posts = Posts::orderBy('created_at', 'desc')->paginate('6');
+        return view('posts/index');
+        $posts = Post::orderBy('created_at', 'desc')->paginate('6');
         return view('posts/index', compact('posts'));
     }
 
     //文章详情页面
     public function show($post)
     {
-        $post = Posts::find($post);
+        $post = Post::find($post);
         return view('posts/show', compact('post'));
     }
 
@@ -31,26 +33,28 @@ class PostsController extends Controller
     //文章创建实际保存逻辑
     public function store(Request $request)
     {
+
         $this->validate($request, [
             'title'=>'required|string|max:100|min:5',
             'content'=>'required'
         ]);
-        $post = Posts::create([
+        $post = Post::create([
             'title'=>$request['title'],
-            'content'=>$request['content']
+            'content'=>$request['content'],
+            'user_id'=>Auth::id()
         ]);
 
-        return redirect('/posts');
+        //return redirect('/posts');
     }
 
     //编辑页展示
-    public function edit(Posts $post)
+    public function edit(Post $post)
     {
         return view('posts/edit', compact('post'));
     }
 
     //编辑页面实际逻辑
-    public function update(Posts $post, Request $request)
+    public function update(Post $post, Request $request)
     {
         //参数验证
         $this->validate($request, [
@@ -65,7 +69,7 @@ class PostsController extends Controller
         return redirect("/posts/{$post->id}");
     }
 
-    public function delete(Posts $post)
+    public function delete(Post $post)
     {
         $post->delete();
         return redirect('/posts');

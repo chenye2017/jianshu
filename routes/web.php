@@ -30,8 +30,13 @@ Route::get('/user/me/setting', '\App\Http\Controllers\UserController@setting');
 //用户个人信息保存逻辑
 Route::post('/user/me/setting', '\App\Http\Controllers\UserController@settingStore');
 
+//文章创建页面
+Route::get('/posts/create', '\App\Http\Controllers\PostsController@create');
+
 //文章编辑页面
 Route::get('/posts/{post}/edit', '\App\Http\Controllers\PostsController@edit');
+
+
 
 //文章列表页面
 Route::get('/posts', '\App\Http\Controllers\PostsController@index');
@@ -39,6 +44,8 @@ Route::get('/posts', '\App\Http\Controllers\PostsController@index');
 
 //文章详情页面  get访问方式 控制器/对象
 Route::get('/posts/{post}', '\App\Http\Controllers\PostsController@show');
+
+
 
 //文章创建逻辑
 Route::post('/posts', '\App\Http\Controllers\PostsController@store');
