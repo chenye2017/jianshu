@@ -11,15 +11,20 @@
 |
 */
 //用户注册页面
+Route::get('/', function () {
+    return redirect('/posts');
+});
+
 Route::get('/register', '\App\Http\Controllers\RegisterController@index');
 //用户注册逻辑
 Route::post('/register', '\App\Http\Controllers\RegisterController@register');
 
 //用户登录页面
-Route::get('/login', '\App\Http\Controllers\LoginController@index');
+Route::get('/login', '\App\Http\Controllers\LoginController@index')->name('login');
 //用户登录逻辑
 Route::post('/login', '\App\Http\Controllers\LoginController@login');
 
+Route::group(['middleware' => 'auth:web'] , function () {
 //用户注销
 Route::get('/logout', '\App\Http\Controllers\LoginController@logout');
 
@@ -58,3 +63,8 @@ Route::put('/posts/{post}', '\App\Http\Controllers\PostsController@update');
 
 //文章删除
 Route::get('/posts/{post}/delete', '\App\Http\Controllers\PostsController@delete');
+
+
+//文章添加评论
+Route::post('/posts/{post}/comment', '\App\Http\Controllers\PostsController@comment')  ;
+});

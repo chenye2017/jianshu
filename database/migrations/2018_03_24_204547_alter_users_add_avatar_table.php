@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CratePostsTable extends Migration
+class AlterUsersAddAvatarTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,12 +14,8 @@ class CratePostsTable extends Migration
     public function up()
     {
         //
-        Schema::create('posts', function (Blueprint $table) {
-            $table->increments('id');
-            $table->string('title')->default('');
-            $table->text('content');
-            $table->integer('user_id')->default(0);
-            $table->timestamps();
+        Schema::table('users', function (Blueprint $table) {
+            $table->string('avatar');
         });
     }
 
@@ -31,6 +27,5 @@ class CratePostsTable extends Migration
     public function down()
     {
         //
-        Schema::dropIfExists('posts');
     }
 }

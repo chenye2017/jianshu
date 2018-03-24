@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Comment;
 use App\Post;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -12,8 +13,9 @@ class PostsController extends Controller
     //获取文章列表页
     public function index()
     {
-        return view('posts/index');
-        $posts = Post::orderBy('created_at', 'desc')->paginate('6');
+        $posts = Post::orderBy('created_at', 'desc')
+            ->withCount('comments')
+            ->paginate('6');
         return view('posts/index', compact('posts'));
     }
 
@@ -21,6 +23,7 @@ class PostsController extends Controller
     public function show($post)
     {
         $post = Post::find($post);
+        $post->load('comments');  //模板的预加载
         return view('posts/show', compact('post'));
     }
 
@@ -81,5 +84,21 @@ class PostsController extends Controller
     {
         $path = $request->file('wangEditorH5File')->storePublicly(md5(time()));
         return asset('/storage/'.$path);
+    }
+
+    //添加评论
+    public function comment(Post $post, Request $req)
+    {
+        //表单校验
+        $this->validate($req, [
+            'content' => 'required|min:3'
+        ]);
+
+        $comment = new Comment();
+        $comment->content = $req->content;
+        $comment->user_id = \Auth::id();
+        $post->comments()->save($comment);
+
+        return back();
     }
 }
