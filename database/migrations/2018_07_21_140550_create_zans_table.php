@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AlterUsersAddAvatarTable extends Migration
+class CreateZansTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,8 +14,11 @@ class AlterUsersAddAvatarTable extends Migration
     public function up()
     {
         //
-        Schema::table('users', function (Blueprint $table) {
-            $table->string('avatar')->default('');
+        Schema::create('zans', function (Blueprint $table) {
+            $table->increments('id');
+            $table->integer('post_id');
+            $table->integer('user_id');
+            $table->timestamps();
         });
     }
 
@@ -27,5 +30,6 @@ class AlterUsersAddAvatarTable extends Migration
     public function down()
     {
         //
+        Schema::dropIfExists('zans');
     }
 }

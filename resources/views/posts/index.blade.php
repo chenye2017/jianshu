@@ -35,10 +35,10 @@
                 @foreach($posts as $post)
                 <div class="blog-post">
                     <h2 class="blog-post-title"><a href="/posts/{{ $post->id  }}" >{{ $post->title }}</a></h2>
-                    <p class="blog-post-meta">{{ $post->created_at }} <a href="/user/5">Kassandra Ankunding2</a></p>
+                    <p class="blog-post-meta">{{ $post->created_at->toFormattedDateString() }} <a href="/user/5">{{$post->user->name}}</a></p>
 
                     <p>{!! str_limit($post->content, 100, '...') !!}
-                    <p class="blog-post-meta">赞 0  | 评论 {{$post->comments_count}}</p>
+                    <p class="blog-post-meta">赞 {{$post->zans_count}}  | 评论 {{$post->comments_count}}</p>
                 </div>
                 @endforeach
 

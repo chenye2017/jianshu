@@ -4,9 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Comment;
 use App\Post;
+use App\Zan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use function Sodium\compare;
+
 
 class PostsController extends Controller
 {
@@ -15,6 +16,7 @@ class PostsController extends Controller
     {
         $posts = Post::orderBy('created_at', 'desc')
             ->withCount('comments')
+            ->withCount('zans')
             ->paginate('6');
         return view('posts/index', compact('posts'));
     }
@@ -41,13 +43,13 @@ class PostsController extends Controller
             'title'=>'required|string|max:100|min:5',
             'content'=>'required'
         ]);
-        $post = Post::create([
+        $post = [
             'title'=>$request['title'],
             'content'=>$request['content'],
             'user_id'=>Auth::id()
-        ]);
-
-        //return redirect('/posts');
+        ];
+        $post = Post::create($post);
+        return redirect('/posts/'.$post->id); //相比较老师的写法，感觉这样更容易理解些，反正这个方法其实就是浏览器地址的变更，弄出一个浏览器能是别的地址就可以了，不用考虑写在浏览器上的内容是id还是什么内容
     }
 
     //编辑页展示
@@ -65,15 +67,22 @@ class PostsController extends Controller
             'content'=>'required'
         ]);
 
+        //权限验证
+        $this->authorize('update', $post);
+
+        //逻辑
         $post->title = $request['title'];
         $post->content = $request['content'];
         $post->save();
 
+        //渲染
         return redirect("/posts/{$post->id}");
     }
 
     public function delete(Post $post)
     {
+        $this->authorize('delete', $post);
+
         $post->delete();
         return redirect('/posts');
     }
@@ -95,10 +104,32 @@ class PostsController extends Controller
         ]);
 
         $comment = new Comment();
-        $comment->content = $req->content;
+        $comment->content = $req->input('content');
         $comment->user_id = \Auth::id();
-        $post->comments()->save($comment);
+        $comment->post_id = $post->id;
 
+        /*$data = [
+            'content' => $comment->content,
+            'user_id' => $comment->user_id,
+            'post_id' => $comment->post_id
+        ];*/
+        $comment->save();
+
+        return back();
+    }
+
+    public function zan(Post $post)
+    {
+        $post_id = $post->id;
+        $user_id = \Auth::id();
+        Zan::firstOrCreate(compact('post_id', 'user_id'));
+        return back();
+    }
+
+    public function unzan(Post $post)
+    {
+        $user_id = \Auth::id();
+        $post->zan($user_id)->delete();
         return back();
     }
 }

@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AlterUsersAddAvatarTable extends Migration
+class AddDeleteAtToZans extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,9 @@ class AlterUsersAddAvatarTable extends Migration
      */
     public function up()
     {
-        //
-        Schema::table('users', function (Blueprint $table) {
-            $table->string('avatar')->default('');
+        Schema::table('zans', function (Blueprint $table) {
+            //
+            $table->softDeletes();
         });
     }
 
@@ -26,6 +26,8 @@ class AlterUsersAddAvatarTable extends Migration
      */
     public function down()
     {
-        //
+        Schema::table('zans', function (Blueprint $table) {
+            //
+        });
     }
 }

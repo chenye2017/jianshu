@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Redirect;
 
 class LoginController extends Controller
 {
-    //登录页面
+    //登录页面,再次进行了跳转
     public function index()
     {
         if (Auth::check()) {
