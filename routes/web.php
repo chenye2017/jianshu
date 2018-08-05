@@ -101,7 +101,12 @@ Route::get('/logout', '\App\Http\Controllers\LoginController@logout');
 Route::group(['prefix'=>'/user', 'middleware'=>'auth:web'], function () {
     Route::get('/me/setting', '\App\Http\Controllers\UserController@setting');
     Route::post('/me/setting', '\App\Http\Controllers\UserController@settingStore');
+    Route::get('/{user}', '\App\Http\Controllers\UserController@show'); //某个人的主页
+    Route::post('/{user}/fan', '\App\Http\Controllers\UserController@fan'); //关注某人
+    Route::post('/{user}/unfan', '\App\Http\Controllers\UserController@unfan'); //取消关注某人
 });
+
+
 
 
 
