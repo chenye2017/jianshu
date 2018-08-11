@@ -48,6 +48,8 @@ class UserController extends Controller
 
     public function show(User $user)
     {
+        
+
         $posts = $user->posts()->orderBy('created_at')->take(10)->get();
 
         $user = User::withCount(['posts', 'fans', 'stars'])->find($user->id);

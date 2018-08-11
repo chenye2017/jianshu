@@ -11,7 +11,7 @@
 |
 */
 Route::group(['prefix'=>'/test'], function () {
-    Route::any('/test1', '\App\Http\Controllers\TestController@test1');
+    Route::any('/test1/{id}', '\App\Http\Controllers\TestController@test1');
 });
 
 
@@ -105,6 +105,15 @@ Route::group(['prefix'=>'/user', 'middleware'=>'auth:web'], function () {
     Route::post('/{user}/fan', '\App\Http\Controllers\UserController@fan'); //关注某人
     Route::post('/{user}/unfan', '\App\Http\Controllers\UserController@unfan'); //取消关注某人
 });
+
+//专题
+Route::get('/topic/{topic}', '\App\Http\Controllers\TopicController@show'); //专题页
+Route::post('/topic/{topic}', '\App\Http\Controllers\TopicController@show'); //专题页
+
+
+//后台管理
+include_once ('admin.php');
+
 
 
 

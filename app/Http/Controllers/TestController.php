@@ -10,6 +10,7 @@ namespace App\Http\Controllers;
 
 
 use App\Post;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class TestController extends Controller
@@ -21,8 +22,10 @@ class TestController extends Controller
         return view('test/test', compact('name'));
     }
 
-    public function test1()
+    public function test1(Request $request, $id)
     {
+        dd($id);
+        dd($request->input('id'));
         dd(asset('images/ss.jpg'));
     }
 
