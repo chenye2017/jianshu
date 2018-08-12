@@ -22,13 +22,12 @@ class LoginController extends Controller
     {
         //验证
         $this->validate($request, [
-            'email'=>'required|min:5|email',
-            'password'=>'required|min:5|max:10'
+            'email'    => 'required|min:5|email',
+            'password' => 'required|min:5|max:10'
         ]);
 
         //门脸类完成登录功能
-        if (Auth::attempt(['email'=>$request->email, 'password'=>$request->password], $request->is_remember))
-        {
+        if (Auth::attempt(['email' => $request->email, 'password' => $request->password], $request->is_remember)) {
             return redirect('/posts');
         } else {
             return Redirect::back()->withErrors('用户名和密码不匹配');

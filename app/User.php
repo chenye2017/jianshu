@@ -47,4 +47,14 @@ class User extends Authenticatable
         return $this->hasMany('\App\Fan', 'star_id')->where('fan_id', $userid)->count();
     }
 
+    public function notices()
+    {
+        return $this->belongsToMany('\App\Notice', 'user_notices', 'user_id', 'notice_id');
+    }
+
+    public function addNotice($notice)
+    {
+        return $this->notices()->save($notice);
+    }
+
 }

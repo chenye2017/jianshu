@@ -30,12 +30,12 @@ class Post extends Model
 
     public function zan($userid)
     {
-        return  $this->hasMany('App\Zan')->where('user_id', $userid);
+        return $this->hasMany('App\Zan')->where('user_id', $userid);
     }
 
     public function zans()
     {
-        return  $this->hasMany('App\Zan');
+        return $this->hasMany('App\Zan');
     }
 
     /**

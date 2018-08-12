@@ -17,13 +17,13 @@ class RegisterController extends Controller
     public function register(Request $request)
     {
         $this->validate($request, [
-            'name' => 'required|min:5|unique:users,name',
-            'email' => 'required|email|unique:users,email',
+            'name'     => 'required|min:5|unique:users,name',
+            'email'    => 'required|email|unique:users,email',
             'password' => 'required|min:5|max:10|confirmed',
         ]);
 
-        $name = $request->name;
-        $email = $request->email;
+        $name     = $request->name;
+        $email    = $request->email;
         $password = bcrypt($request->password);
 
         User::create(compact('name', 'email', 'password'));

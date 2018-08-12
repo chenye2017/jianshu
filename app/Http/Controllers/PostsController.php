@@ -22,9 +22,8 @@ class PostsController extends Controller
     }
 
     //文章详情页面
-    public function show($post)
+    public function show(Post $post)
     {
-        $post = Post::find($post);
         $post->load('comments');  //模板的预加载
         return view('posts/show', compact('post'));
     }
@@ -40,16 +39,16 @@ class PostsController extends Controller
     {
 
         $this->validate($request, [
-            'title'=>'required|string|max:100|min:5',
-            'content'=>'required'
+            'title'   => 'required|string|max:100|min:5',
+            'content' => 'required'
         ]);
         $post = [
-            'title'=>$request['title'],
-            'content'=>$request['content'],
-            'user_id'=>Auth::id()
+            'title'   => $request['title'],
+            'content' => $request['content'],
+            'user_id' => Auth::id()
         ];
         $post = Post::create($post);
-        return redirect('/posts/'.$post->id); //相比较老师的写法，感觉这样更容易理解些，反正这个方法其实就是浏览器地址的变更，弄出一个浏览器能是别的地址就可以了，不用考虑写在浏览器上的内容是id还是什么内容
+        return redirect('/posts/' . $post->id); //相比较老师的写法，感觉这样更容易理解些，反正这个方法其实就是浏览器地址的变更，弄出一个浏览器能是别的地址就可以了，不用考虑写在浏览器上的内容是id还是什么内容
     }
 
     //编辑页展示
@@ -63,15 +62,15 @@ class PostsController extends Controller
     {
         //参数验证
         $this->validate($request, [
-            'title'=>'required|string|max:100|min:5',
-            'content'=>'required'
+            'title'   => 'required|string|max:100|min:5',
+            'content' => 'required'
         ]);
 
         //权限验证
         $this->authorize('update', $post);
 
         //逻辑
-        $post->title = $request['title'];
+        $post->title   = $request['title'];
         $post->content = $request['content'];
         $post->save();
 
@@ -92,7 +91,7 @@ class PostsController extends Controller
     public function imagesUpload(Request $request)
     {
         $path = $request->file('wangEditorH5File')->storePublicly(md5(time()));
-        return asset('/storage/'.$path);
+        return asset('/storage/' . $path);
     }
 
     //添加评论
@@ -103,7 +102,7 @@ class PostsController extends Controller
             'content' => 'required|min:3'
         ]);
 
-        $comment = new Comment();
+        $comment          = new Comment();
         $comment->content = $req->input('content');
         $comment->user_id = \Auth::id();
         $comment->post_id = $post->id;

@@ -14,5 +14,6 @@ class Test extends Model
 
     //可以批量赋值的属性，什么叫做批量赋值，就是我们可以通过create方法插入的，不是save那种，create是直接传入一个索引数组，
     //save 是通过给实例的属性一个个赋值，就这点看来，确实有批量赋值的意思
-    protected $fillable = ['name'];php
+    protected $fillable = ['name'];
+
 }

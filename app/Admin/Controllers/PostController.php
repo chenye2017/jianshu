@@ -28,7 +28,7 @@ class PostController extends Controller
 
         return [
             'error' => 0,
-            'msg' => '处理成功'
+            'msg'   => '处理成功'
         ];
     }
 }

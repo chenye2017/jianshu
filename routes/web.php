@@ -106,12 +106,15 @@ Route::group(['prefix'=>'/user', 'middleware'=>'auth:web'], function () {
     Route::post('/{user}/unfan', '\App\Http\Controllers\UserController@unfan'); //取消关注某人
 });
 
-//专题
+// 专题
 Route::get('/topic/{topic}', '\App\Http\Controllers\TopicController@show'); //专题页
 Route::post('/topic/{topic}', '\App\Http\Controllers\TopicController@show'); //专题页
 
 
-//后台管理
+// 通知
+Route::get('/notices', '\App\Http\Controllers\NoticesController@index');
+
+// 后台管理
 include_once ('admin.php');
 
 

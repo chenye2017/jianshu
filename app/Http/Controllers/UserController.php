@@ -27,7 +27,7 @@ class UserController extends Controller
         $user = \Auth::user();
         if ($req->name != $user->name) {
             if (User::where('name', '=', $req->name)
-                ->count() == 0 ) {
+                    ->count() == 0) {
                 $user->name = $req->name;
             } else {
                 session()->flash('danger', '用户名已经被注册');
@@ -36,8 +36,8 @@ class UserController extends Controller
 
 
         if ($req->file('avatar')) {
-            $path = $req->file('avatar')->storePublicly($user->id);
-            $user->avatar = '/storage/'.$path;
+            $path         = $req->file('avatar')->storePublicly($user->id);
+            $user->avatar = '/storage/' . $path;
         }
 
 
@@ -48,27 +48,27 @@ class UserController extends Controller
 
     public function show(User $user)
     {
-        
+
 
         $posts = $user->posts()->orderBy('created_at')->take(10)->get();
 
         $user = User::withCount(['posts', 'fans', 'stars'])->find($user->id);
 
-        $fans = $user->fans()->get();
-        $stars  = $user->stars()->get();
+        $fans  = $user->fans()->get();
+        $stars = $user->stars()->get();
 
         return view('user/show', compact('posts', 'user', 'fans', 'stars'));
     }
 
     public function fan(User $user)
     {
-        $fan_id = \Auth::id();
+        $fan_id  = \Auth::id();
         $star_id = $user->id;
         Fan::firstOrCreate(compact('fan_id', 'star_id'));
 
         return [
-            'errCode'=>0,
-            'errMsg'=>'关注成功'
+            'errCode' => 0,
+            'errMsg'  => '关注成功'
         ];
     }
 
@@ -79,7 +79,7 @@ class UserController extends Controller
 
         return [
             'errCode' => 0,
-            'errMsg' => '取消成功'
+            'errMsg'  => '取消成功'
         ];
     }
 }
