@@ -9,7 +9,9 @@
 namespace App\Admin\Controllers;
 
 
+use App\AdminPermission;
 use App\AdminUser;
+use App\AdminRole;
 use Illuminate\Http\Request;
 
 /**
@@ -46,5 +48,43 @@ class UserController extends Controller
         $users = AdminUser::orderBy('id', 'asc')->paginate(2);
 
         return view('admin.user.index', compact('users'));
+    }
+
+    public function role(AdminUser $adminUser)
+    {
+        $roles = AdminRole::all();
+
+        $userrole = $adminUser->roles;
+        $userid = $adminUser->id;
+
+        return view('admin.user.role', compact('roles', 'userrole', 'userid'));
+    }
+
+    public function storeRole(AdminUser $adminUser, Request $request)
+    {
+        $role = $request->input('roles', []);
+        $roles = AdminRole::find($role);
+
+        $userRole = $adminUser->roles;
+
+        //delete
+        $delete = $userRole->diff($roles);
+        foreach ($delete as $d_value) {
+            $adminUser->roles()->detach($d_value);
+        }
+
+        //save
+        $save = $roles->diff($userRole);
+        foreach ($save as $s_value) {
+            $adminUser->roles()->save($s_value);
+        }
+        return redirect('/admin/user/'.$adminUser->id.'/role');
+    }
+
+    public function test(AdminUser $adminUser)
+    {
+
+        $permission = AdminPermission::find(1);
+        dd($adminUser->hasPermission($permission));
     }
 }

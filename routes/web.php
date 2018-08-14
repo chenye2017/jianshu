@@ -62,12 +62,11 @@ Route::get('/', function () {
 
 
 
-//文章编辑页面
-Route::get('/posts/{post}/edit', '\App\Http\Controllers\PostsController@edit');
+
 
 
 //文章页面
-Route::group(['prefix'=>'/posts'], function () {
+Route::group(['prefix'=>'/posts', 'middleware'=>'auth'], function () {
     Route::get('/', '\App\Http\Controllers\PostsController@index'); //文章列表
     Route::get('/{post}', '\App\Http\Controllers\PostsController@show')->where(['post'=>'[0-9]+']); //文章详情
     Route::get('/create', '\App\Http\Controllers\PostsController@create'); //文章创建页面
@@ -78,6 +77,8 @@ Route::group(['prefix'=>'/posts'], function () {
     Route::post('/{post}/comment', '\App\Http\Controllers\PostsController@comment');//图片上传
     Route::get('/{post}/zan', '\App\Http\Controllers\PostsController@zan');
     Route::get('/{post}/unzan', '\App\Http\Controllers\PostsController@unzan');
+    //文章编辑页面
+    Route::get('/posts/{post}/edit', '\App\Http\Controllers\PostsController@edit');
 
 });
 
@@ -95,7 +96,9 @@ Route::group(['prefix'=>'/login'], function () {
 });
 
 //用户注销
-Route::get('/logout', '\App\Http\Controllers\LoginController@logout');
+Route::group(['middleware'=>'auth'], function () {
+    Route::get('/logout', '\App\Http\Controllers\LoginController@logout');
+});
 
 //用户
 Route::group(['prefix'=>'/user', 'middleware'=>'auth:web'], function () {
@@ -107,12 +110,16 @@ Route::group(['prefix'=>'/user', 'middleware'=>'auth:web'], function () {
 });
 
 // 专题
-Route::get('/topic/{topic}', '\App\Http\Controllers\TopicController@show'); //专题页
-Route::post('/topic/{topic}', '\App\Http\Controllers\TopicController@show'); //专题页
+Route::group(['prefix'=>'/user', 'middleware'=>'auth:web'], function () {
+    Route::get('/topic/{topic}', '\App\Http\Controllers\TopicController@show'); //专题页
+    Route::post('/topic/{topic}', '\App\Http\Controllers\TopicController@show'); //专题页
+});
 
 
 // 通知
-Route::get('/notices', '\App\Http\Controllers\NoticesController@index');
+Route::group(['prefix'=>'/user', 'middleware'=>'auth:web'], function () {
+    Route::get('/notices', '\App\Http\Controllers\NoticesController@index');
+});
 
 // 后台管理
 include_once ('admin.php');
